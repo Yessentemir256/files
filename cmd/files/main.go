@@ -19,4 +19,16 @@ func main() {
 	}()
 
 	log.Printf("%#v", file)
+
+	// читаем 4096 байт
+	buf := make([]byte, 4096)
+	read, err := file.Read(buf)
+	if err != nil {
+		log.Print(err)
+		return
+	}
+
+	// сохраняем ровно столько, сколько прочитали
+	data := string(buf[:read])
+	log.Print(data)
 }
