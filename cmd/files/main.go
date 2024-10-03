@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io"
 	"log"
 	"os"
 )
@@ -18,17 +19,22 @@ func main() {
 		}
 	}()
 
-	log.Printf("%#v", file)
+	content := make([]byte, 0)
+	buf := make([]byte, 4)
+	for {
+		read, err := file.Read(buf)
+		if err == io.EOF { // файл закончился
+			content = append(content, buf[:read]...)
+			break
+		}
 
-	// читаем 4096 байт
-	buf := make([]byte, 4096)
-	read, err := file.Read(buf)
-	if err != nil {
-		log.Print(err)
-		return
+		if err != nil {
+			log.Print(err)
+			return
+		}
+
+		content = append(content, buf[:read]...)
 	}
-
-	// сохраняем ровно столько, сколько прочитали
-	data := string(buf[:read])
+	data := string(content)
 	log.Print(data)
 }
