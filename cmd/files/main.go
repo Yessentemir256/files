@@ -20,7 +20,7 @@ func main() {
 	}()
 
 	content := make([]byte, 0)
-	buf := make([]byte, 4)
+	buf := make([]byte, 4096)
 	for {
 		read, err := file.Read(buf)
 		if err == io.EOF { // файл закончился
